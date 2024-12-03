@@ -47,47 +47,43 @@ class _translatorPageState extends State<translatorPage> {
   TextEditingController controller = TextEditingController();
 
   void translator() async {
+    // Get the language codes for input and output languages using the getLanguage() function
     String getInputLang = getLanguage(input);
     String getOutLang = getLanguage(out);
+    // Get the text entered by the user in the TextEditingController
     String getTextInput = controller.text.toString();
 
+    // Check if either input or output language is not selected
     if (getInputLang == '--' || getOutLang == '--') {
       setState(() {
-        output_translator = 'you didn\'t chooise lang';
+        output_translator = 'You didn\'t choose language';
       });
       return;
     }
+    // Check if the input text is empty
     if (getTextInput.isEmpty) {
       setState(() {
-        output_translator = 'please enter text to translate';
+        output_translator = 'Please enter text to translate';
       });
     }
     try {
-      print("Starting hardcoded translation...");
+      // Initialize the GoogleTranslator class to handle the translation process
       GoogleTranslator translate = GoogleTranslator();
 
-      // Perform the translation with hardcoded values
+      // Perform the translation
       var translation = await translate.translate(getTextInput,
           from: getInputLang, to: getOutLang);
       setState(() {
+        // Update the output_translator with the translated text
         output_translator = translation.text;
       });
-      // Print the result of the translation
-      print("Hardcoded translation: ${translation.text}");
+
     } catch (e) {
-      // Handle and print any errors that occur during translation
-      print("Error during hardcoded translation: $e");
+      print("Error during translation: $e");
     }
   }
 
-  // String getLanguage(String Language) {
-  //   if (Language == 'English') {
-  //     return 'en';
-  //   } else if (Language == 'Spanish') {
-  //     return 'es';
-  //   }
-  //   return '--';
-  // }
+  //function that get name of Language and return the Language code
   String getLanguage(String Language) {
     if (Language == 'English') {
       return 'en';
@@ -146,7 +142,7 @@ class _translatorPageState extends State<translatorPage> {
     } else if (Language == 'Bengali') {
       return 'bn';
     }
-    return '--'; // Default return if no match found
+    return '--'; //  return if no Language found
   }
 
   @override
@@ -170,6 +166,7 @@ class _translatorPageState extends State<translatorPage> {
                 SizedBox(
                   height: 20,
                 ),
+                //DropdownButton of name of Language that i want to translate from it
                 DropdownButton(
                     hint: Text(input),
                     dropdownColor: Colors.pink.shade50,
@@ -196,6 +193,7 @@ class _translatorPageState extends State<translatorPage> {
                 SizedBox(
                   height: 20,
                 ),
+                //DropdownButton of name of Language that i want to translate to it
                 DropdownButton(
                     hint: Text(out),
                     dropdownColor: Colors.pink.shade50,
@@ -207,6 +205,8 @@ class _translatorPageState extends State<translatorPage> {
                       );
                     }).toList(),
                     onChanged: (String? value) {
+                      //The value here is the new value selected from the dropdown menu.
+                      //String? means that the value can be either a String or null. The ? makes it nullable.
                       setState(() {
                         out = value!;
                       });
@@ -250,6 +250,7 @@ class _translatorPageState extends State<translatorPage> {
             SizedBox(
               height: 20,
             ),
+            //The text will display the translation answer.
             Text("\n$output_translator",
                 style: TextStyle(
                     color: Colors.white,
